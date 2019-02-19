@@ -2,17 +2,15 @@ const mongodb = require('mongodb');
 const MongoClient = mongodb.MongoClient;
 
 
-
-let _db; 
+let _db;
 
 const mongoConnect = callback =>{
 
-MongoClient.connect('mongodb+srv://DinhHuy_1996:Professionalhuy@severwebshop-xbrlk.mongodb.net/test?retryWrites=true')
+MongoClient.connect('mongodb+srv://PhanDinhHuy_1996:professionalhuy331@severwebshop-xbrlk.mongodb.net/test?retryWrites=true',{useNewUrlParser: true})
 .then(client =>{    
-    console.log('Connected!');    
-    _db =client.db();    
-    console.log(_db);
-    callback();
+    console.log('Connected!');
+    _db = client.db(); 
+    callback(_db);
 })
 .catch( err =>{
     console.log(err);
