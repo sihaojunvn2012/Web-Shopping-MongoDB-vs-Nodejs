@@ -73,14 +73,19 @@ module.exports = class Product {
         })
     }
 
-    static DeletePrductID(id) {
-       
+    static DeletePrductID(productId) {
+        const db = GetDb();
+        return db 
+        .collection('products')
+        .deleteOne({_id : new mongodb.ObjectId(productId)})        
+        .then(product =>{
+            console.log(product);
+        })
+        .catch(err=>{
+            
+            console.log(err);          
+
+        })
     }
-    // Get Data From products.json than we will pass into view  
-
-
-
-
-
-
+    // Get Data From products.json than we will pass into view
 }
