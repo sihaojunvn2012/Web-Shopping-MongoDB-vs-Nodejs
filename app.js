@@ -19,7 +19,7 @@ app.use(shopRoutes);
 app.use(errorController.GetError404);
 
 mongoConnect( Client =>{
-    console.log(Client);
+    
     app.listen(port);
 
 })

@@ -61,14 +61,16 @@ exports.Get_Product = (req, res, next) => {
         Product.FindById(ID)
         .then( product =>{
 
+                console.log(product);
+                
             res.render('Shop/product-detail', {
 
                 Product: product,
-                Path: `/Products/${Element.ID}`,
+                Path: `/Products/${product._id}`,
                 TitlePage: 'Product Detail'
             })
         })
-    }
+}
 
 
 exports.Post_Cart = (req, res, next) => {

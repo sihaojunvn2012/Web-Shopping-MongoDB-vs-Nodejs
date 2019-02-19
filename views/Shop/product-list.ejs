@@ -33,7 +33,7 @@
                     <p class="product__description"><%= Product.Description %></p>
                 </div>
                 <div class="card__actions">
-                        <a href="/Products/<%= Product.ID %>" class="btn">Detail</a>
+                        <a href="/Products/<%= Product._id %>" class="btn">Detail</a>
                         
                         <%- include('../includes/Add-To-Cart.ejs',{Product: Product}) %>
 

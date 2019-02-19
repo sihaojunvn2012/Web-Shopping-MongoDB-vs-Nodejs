@@ -1,25 +1,10 @@
 const Cart = require('./cart');
 const GetDb = require('../util/database').GetDb;
+const mongodb = require('mongodb');
 
 
 
 
-const GetProductFromFile = callback => {
-
-
-    fs.readFile(p, (err, fileContent) => {
-
-        // if it had error . we will reset Data Product , it will be become emty array
-        if (err) {
-
-            callback([]);
-        }
-        else {
-            callback(JSON.parse(fileContent));
-        }
-    });
-
-}
 
 module.exports = class Product {
     // constructor properties    
@@ -57,8 +42,7 @@ module.exports = class Product {
           // Get All Documents and Turn Them into Javascript Array 
           .toArray()
           .then( products =>{
-
-            console.log(products);
+            console.log("OK");           
             return products;
             
           })
@@ -75,61 +59,28 @@ module.exports = class Product {
 
         return db
         .collection('products')
-        .find({_id:productId})
+        // if you want Object Cast , you should use new ongodb.
+        // ObjectID  it will covert from string to object on MogoDB         
+        .find({_id: new mongodb.ObjectID(productId)})
         .next()
         .then( product =>{
-            console.log(product)
+            console.log(product);            
             return product;
-
         })
         .catch(err =>{
 
             console.log(err);
-
         })
-
     }
 
-
-
-
     static DeletePrductID(id) {
-        GetProductFromFile(Elements => {
-
-            const Product = Elements.find(p => p.ID === id);
-
-            const UpdateProducts = Elements.filter(p => p.ID !== id);
-
-
-
-            fs.writeFile(p, JSON.stringify(UpdateProducts), err => {
-                if (!err) {
-
-                    Cart.DeleteProduct(id, parseFloat(Product.Price));
-
-                }
-            });
-
-        });
+       
     }
     // Get Data From products.json than we will pass into view  
 
 
-    // Find ID vs Use CallBack 
-    static FindById(id, callback) {
-        GetProductFromFile(element => {
 
-            const Product = element.find(element => {
-                if (element.ID === id) {
 
-                    return element;
-                }
-            });
-            callback(Product);
-
-        });
-
-    }
 
 
 }
