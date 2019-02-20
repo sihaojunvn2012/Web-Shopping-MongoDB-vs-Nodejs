@@ -7,7 +7,7 @@ let _db;
 const mongoConnect = callback =>{
 
 MongoClient.connect('mongodb+srv://PhanDinhHuy_1996:professionalhuy331@severwebshop-xbrlk.mongodb.net/test?retryWrites=true',{useNewUrlParser: true})
-.then(client =>{    
+.then(client =>{       
     console.log('Connected!');
     _db = client.db(); 
     callback(_db);
@@ -24,10 +24,7 @@ const GetDb = () =>{
     if(_db){
         return _db;
     }
-    else{
-
-        throw ' No database found! '
-    }
+    
 }
 exports.mongoConnect = mongoConnect;
 exports.GetDb  = GetDb;

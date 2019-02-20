@@ -13,6 +13,7 @@ exports.Get_Product_List = (req, res, next) => {
     Product.fetchAll().
         then(products => {
 
+            console.log(req.User);
             res.render('Shop/product-list',
                 {
 
@@ -112,8 +113,6 @@ exports.Get_Cart = (req, res, next) => {
                     Products: CartProducts
                 });
             });
-
-
         });
     }
 

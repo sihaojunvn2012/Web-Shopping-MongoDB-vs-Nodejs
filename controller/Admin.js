@@ -1,5 +1,5 @@
 const Product = require('../models/product');
-
+const mongodb = require('mongodb');
 
 exports.GetAddProduct = (req, res, next) => {
     res.render('Admin/add-product',
@@ -9,13 +9,14 @@ exports.GetAddProduct = (req, res, next) => {
             Editing: false
         });
 }
-exports.PostAddProduct = (req, res, next) => {
+exports.PostAddProduct = (req, res, next) => {   
     const Title = req.body.title;
     const ImageURL = req.body.imageURL;
     const Price = req.body.Price;
     const Description = req.body.Description;
+    
 
-    let pro_duct = new Product(Title, ImageURL, Price, Description);
+    let pro_duct = new Product(null,Title, ImageURL, Price, Description,req.User._id);
     pro_duct.save()
         .then(result => {
             console.log('Created Product');
@@ -59,7 +60,7 @@ exports.PostEditProduct = (req, res, next) => {
     const ImageURL = req.body.imageURL;
     const Price = req.body.Price;
     const Description = req.body.Description;
-    const EditProduct = new Product(ProductId, Title, ImageURL, Price, Description);
+    const EditProduct = new Product(new mongodb.ObjectId(ProductId), Title, ImageURL, Price, Description,req.User._id);
     EditProduct.save();
 
     res.redirect('/admin/products');
@@ -79,19 +80,18 @@ exports.GetEditProduct = (req, res, next) => {
     else {
         console.log(ID);
 
+        Product.FindById(ID) 
+        .then(Product =>{
 
-        res.render('Admin/add-product',
+            res.render('Admin/add-product',
             {
                 TitlePage: 'Edit Product',
                 Path: '/admin/edit-product',
                 Editing: EditMode,
                 product: Product
             });
-
-        //   res.redirect('/');  
-
-
-
+        })
+        //   res.redirect('/');
     }
 }
 
@@ -99,6 +99,7 @@ exports.PostDeleteProduct = (req, res, next) => {
 
     const ID = req.body.productId;
     console.log(ID);
+
     Product.DeletePrductID(ID);
 
     res.redirect('/admin/products');

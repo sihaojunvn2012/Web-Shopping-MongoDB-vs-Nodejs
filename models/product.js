@@ -8,20 +8,30 @@ const mongodb = require('mongodb');
 
 module.exports = class Product {
     // constructor properties    
-    constructor(title, imageURL, Price, Description) {
-
+    constructor(id, title, imageURL, Price, Description,UserId) {
+        this._id = id
         this.Title = title;
         this.ImageURL = imageURL;
         this.Price = Price;
         this.Description = Description;
+        this.UserId = UserId;
     }
 
     //Create Table and Insert Data with Collection and InsertOne 
     save() {
-
-        
         const db = GetDb();
-        return db
+        let dbProduct;
+
+        if (this._id) {
+            console.log('OK');
+            // Update the product
+             dbProduct = db.collection('products').updateOne({ _id: new mongodb.ObjectId(this._id) }, { $set: this })
+           
+        }
+
+        else {
+            // Add the Product 
+            dbProduct =db
             .collection('products')
             .insertOne(this)
             .then(result => {
@@ -29,63 +39,73 @@ module.exports = class Product {
             })
             .catch(err => {
                 console.log(err);
-            });
+            });       
+
+        }
+     return dbProduct.then( product =>{
+         
+           console.log(product);
+     })   
+     .catch(err =>{
+
+        console.log(err);
+     })   
+
     }
     // })
     static fetchAll() {
         const db = GetDb();
-        return db 
-           // Connect To Products 
-          .collection('products')
-           // Find Value of Data like Filter 
-          .find()
-          // Get All Documents and Turn Them into Javascript Array 
-          .toArray()
-          .then( products =>{
-            console.log("OK");           
-            return products;
-            
-          })
-          .catch(err =>{
+        return db
+            // Connect To Products 
+            .collection('products')
+            // Find Value of Data like Filter 
+            .find()
+            // Get All Documents and Turn Them into Javascript Array 
+            .toArray()
+            .then(products => {
+                console.log("OK");
+                return products;
 
-            console.log(err);
+            })
+            .catch(err => {
 
-          });         
+                console.log(err);
+
+            });
 
 
     }
     static FindById(productId) {
         const db = GetDb();
-
         return db
-        .collection('products')
-        // if you want Object Cast , you should use new ongodb.
-        // ObjectID  it will covert from string to object on MogoDB         
-        .find({_id: new mongodb.ObjectID(productId)})
-        .next()
-        .then( product =>{
-            console.log(product);            
-            return product;
-        })
-        .catch(err =>{
+            .collection('products')
+            // if you want Object Cast , you should use new mongodb.
+            // ObjectID  it will covert from string to object on MogoDB         
+            .find({ _id: new mongodb.ObjectID(productId) })
+            .next()
+            .then(product => {
+                console.log(product);
+                return product;
+            })
+            .catch(err => {
 
-            console.log(err);
-        })
+                console.log(err);
+            })
     }
 
     static DeletePrductID(productId) {
         const db = GetDb();
-        return db 
-        .collection('products')
-        .deleteOne({_id : new mongodb.ObjectId(productId)})        
-        .then(product =>{
-            console.log(product);
-        })
-        .catch(err=>{
-            
-            console.log(err);          
+        return db
+            .collection('products')
+            .deleteOne({ _id: new mongodb.ObjectId(productId) })
+            .then(product => {
+                console.log(product);
+            })
+            .catch(err => {
 
-        })
+                console.log(err);
+
+            })
     }
     // Get Data From products.json than we will pass into view
 }

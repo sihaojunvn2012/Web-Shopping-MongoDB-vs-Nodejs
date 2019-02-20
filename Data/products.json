@@ -33,5 +33,44 @@
         "Price": "21.4",
         "Description": "Movie Dragon Ball Super  (Broly And Gogeta)",
         "ID": "M473606"
+    
     }
+
+
+        // static findByID(UserId) {
+        
+    //     const db = GetDb();
+
+    //     let dbUser = db.collection('Users')
+    //                  .findOne({_id : new ObjectId(UserId)})
+    //                  .then(User =>{
+    //                      console.log(User);   
+    //                     return User;
+    //                  })
+    //                  .catch( err =>{
+    //                      console.log(err);
+    //                  }) 
+                     
+    //      return dbUser;            
+    // }
+
+
+
+
+
+
+
+
+    
+    User.findByID('5c6ccd2ede37d1415809381b').
+    then(result =>{
+
+        console.log(result);
+        next();
+    })
+    .catch(err =>{
+
+        console.log(err);
+
+    })
 ]
