@@ -2,6 +2,8 @@ const Product = require('../models/product');
 const mongodb = require('mongodb');
 
 exports.GetAddProduct = (req, res, next) => {
+
+    
     res.render('Admin/add-product',
         {
             TitlePage: 'Add Product',
@@ -16,7 +18,7 @@ exports.PostAddProduct = (req, res, next) => {
     const Description = req.body.Description;
     
 
-    let pro_duct = new Product(null,Title, ImageURL, Price, Description,req.User._id);
+    let pro_duct = new Product(null,Title, ImageURL, Price, Description,req.user._id);
     pro_duct.save()
         .then(result => {
             console.log('Created Product');
@@ -31,6 +33,8 @@ exports.PostAddProduct = (req, res, next) => {
 
 exports.GetAdminProducts = (req, res, next) => {
 
+
+     
     Product.fetchAll()
         .then(products => {
 
@@ -60,7 +64,7 @@ exports.PostEditProduct = (req, res, next) => {
     const ImageURL = req.body.imageURL;
     const Price = req.body.Price;
     const Description = req.body.Description;
-    const EditProduct = new Product(new mongodb.ObjectId(ProductId), Title, ImageURL, Price, Description,req.User._id);
+    const EditProduct = new Product(new mongodb.ObjectId(ProductId), Title, ImageURL, Price, Description,req.user._id);
     EditProduct.save();
 
     res.redirect('/admin/products');

@@ -13,7 +13,10 @@ router.get('/',Product_Controller.Get_Index);
 
 router.post('/Cart',Product_Controller.Post_Cart);
 
-router.get('/orders', Product_Controller.getOrders);
+
+router.post('/create-order',Product_Controller.Post_Order);
+
+router.get('/Orders', Product_Controller.Get_Order);
 
 router.get('/checkout', Product_Controller.getCheckout);
 

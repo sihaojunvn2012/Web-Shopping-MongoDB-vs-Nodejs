@@ -52,7 +52,25 @@ module.exports = class Product {
      })   
 
     }
-    // })
+    static GetCart() {
+
+
+
+
+
+    }                                                                                      
+
+
+
+
+
+
+
+
+
+
+
+
     static fetchAll() {
         const db = GetDb();
         return db
@@ -63,7 +81,7 @@ module.exports = class Product {
             // Get All Documents and Turn Them into Javascript Array 
             .toArray()
             .then(products => {
-                console.log("OK");
+               
                 return products;
 
             })
@@ -84,7 +102,7 @@ module.exports = class Product {
             .find({ _id: new mongodb.ObjectID(productId) })
             .next()
             .then(product => {
-                console.log(product);
+                
                 return product;
             })
             .catch(err => {

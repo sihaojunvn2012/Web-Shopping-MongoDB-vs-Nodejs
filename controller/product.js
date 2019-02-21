@@ -1,19 +1,15 @@
 const Product = require('../models/product');
 const Cart = require('../models/cart');
-
+const User = require('../models/user');
 
 
 
 
 exports.Get_Product_List = (req, res, next) => {
 
-
-
-
     Product.fetchAll().
         then(products => {
 
-            console.log(req.User);
             res.render('Shop/product-list',
                 {
 
@@ -22,13 +18,7 @@ exports.Get_Product_List = (req, res, next) => {
                     Path: '/Products',
 
                 });
-
-
         })
-
-
-
-
     // res.sendFile(path.join(rootDir,'view','shop.ejs'));    
 }
 
@@ -44,7 +34,7 @@ exports.Get_Index = (req, res, next) => {
                     Path: '/'
                 });
         })
-        .catch( err =>{
+        .catch(err => {
 
             console.log(err);
 
@@ -52,83 +42,107 @@ exports.Get_Index = (req, res, next) => {
 }
 
 
-
-
 // Dynamic Routes 
 exports.Get_Product = (req, res, next) => {
-            
-        const ID = req.params.ProductID;
 
-        Product.FindById(ID)
-        .then( product =>{
+    const ID = req.params.ProductID;
 
-                console.log(product);
-                
+    Product.FindById(ID)
+        .then(product => {
+
             res.render('Shop/product-detail', {
 
                 Product: product,
                 Path: `/Products/${product._id}`,
                 TitlePage: 'Product Detail'
             })
+
         })
 }
 
 
+exports.Get_Order = (req, res, next) => {
+
+    req.user.GetOrder()
+        .then(orders => {
+
+
+            res.render('Shop/orders', {
+
+                Orders : orders,
+                Path: '/Orders',
+                TitlePage: 'Your Orders'
+            });
+        })
+        .catch( err =>{
+
+            console.log(err);
+        })
+};
+
+
+exports.Post_Order = (req, res, next) => {
+
+    req.user.AddOrder()
+        .then(result => {
+
+            res.redirect('/Orders');
+
+        })
+
+};
+// chú ý chỗ này tối coi lại liên quan tới bất đồng bộ 
 exports.Post_Cart = (req, res, next) => {
 
-        const ID = req.body.productId;
+
+    const ID = req.body.productId;
 
 
-        Product.FindById(ID, Product => {
+    Product.FindById(ID)
+        .then(product => {
 
-            Cart.AddProduct(ID, parseFloat(Product.Price));
+            return req.user.Add_To_Cart(product);
 
-        });
-        res.redirect('/Cart');
-    }
+        })
+        .then( result =>{
+
+            res.redirect('/Cart')
+
+        } )
+        .catch( err =>{
+
+            console.log(err);
+        })
+   
+}
 
 exports.Get_Cart = (req, res, next) => {
 
-        Cart.GetCart(cart => {
-            Product.fetchAll(Products => {
+    req.user.GetCart()
+        .then(product => {
 
-                let CartProducts = [];
+            res.render('Shop/cart', {
 
-                for (product of Products) {
-
-
-                    const CartProductData = cart.Products.find(p => p.id === product.ID);
-
-                    if (CartProductData) {
-
-                        CartProducts.push({ productData: product, qty: CartProductData.qty });
-
-                    }
-                }
-                console.log(CartProducts);
-                res.render('Shop/cart', {
-
-                    TitlePage: 'Cart',
-                    Path: '/Cart',
-                    Products: CartProducts
-                });
+                TitlePage: 'Cart',
+                Path: '/Cart',
+                Products: product
             });
-        });
-    }
+        })
+}
 
 exports.Post_Delete_Cart_Item = (req, res, next) => {
 
-        const ID = req.body.productId;
+    const ID = req.body.productId;
 
-        Product.FindById(ID, Item => {
+    req.user.DeleteProductFromCart(ID)
+    .then( result =>{
 
-            Cart.DeleteProduct(ID, parseFloat(Item.Price));
+        
+        res.redirect('/Cart')
 
+    })
 
-        });
-
-        res.redirect('/');
-    };
+};
 
 
 exports.getCheckout = (req, res, next) => {
@@ -138,10 +152,4 @@ exports.getCheckout = (req, res, next) => {
     });
 };
 
-exports.getOrders = (req, res, next) => {
-    res.render('Shop/orders', {
-        Path: '/orders',
-        TitlePage: 'Your Orders'
-    });
-};
 

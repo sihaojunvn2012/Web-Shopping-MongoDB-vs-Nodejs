@@ -19,11 +19,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use((req, res, next) => {
 
 
-    User.findByID('5c6ccd2ede37d1415809381b').
-        then(User => {
+    User.findByID('5c6ccd2ede37d1415809381b'). 
+        then(user => {
           // Set Request User when who will req User, it have to reply value for us           
             
-            req.User = User;          
+            req.user = new User(user._id ,user.username, user.mail,user.cart);          
             next();
         })
         .catch(err => {
