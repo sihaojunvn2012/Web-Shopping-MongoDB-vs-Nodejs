@@ -18,8 +18,6 @@ router.post('/add-product',AdminController.PostAddProduct);
 
 router.get('/products' , AdminController.GetAdminProducts);
 
-router.post('',);
-
 router.get('/edit-product/:ID',AdminController.GetEditProduct);
 
 router.post('/edit-product',AdminController.PostEditProduct);

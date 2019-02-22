@@ -52,24 +52,7 @@ module.exports = class Product {
      })   
 
     }
-    static GetCart() {
-
-
-
-
-
-    }                                                                                      
-
-
-
-
-
-
-
-
-
-
-
+                          
 
     static fetchAll() {
         const db = GetDb();
